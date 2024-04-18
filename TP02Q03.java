@@ -529,9 +529,15 @@ public class TP02Q03 {
         return out;
     }
 
+    //
+
+    // #=========================================================================#
+    // # - - - - - - - - - - - - - - - [ M A I N ] - - - - - - - - - - - - - - - #
+    // #=========================================================================#
+
     public static void main(String[] args) {
 
-        Personagens[] hPCharacters = readCSV("/tmp/characters.csv");
+        Personagens[] hPCharacters = readCSV("tmp/characters.csv");
 
         try {
 
