@@ -1,8 +1,9 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.io.ObjectInputStream.GetField;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
@@ -326,11 +327,11 @@ public class TP02Q05 {
         }
 
         void hogwartsStaffOut() {
-            out.print("false" + separation);
+            out.print(hogwartsStaff + separation);
         }
 
         void hogwartsStudentOut() {
-            out.print("false" + separation);
+            out.print(hogwartsStudent + separation);
         }
 
         void actorNameOut() {
@@ -338,7 +339,7 @@ public class TP02Q05 {
         }
 
         void aliveOut() {
-            out.print("false" + separation);
+            out.print(alive + separation);
         }
 
         void dateOfBirthOut() {
@@ -416,7 +417,7 @@ public class TP02Q05 {
         String[] out = {};
         String temp = "";
 
-        for (int i = 3; i < text.length(); i++) {
+        for (int i = 1; i < text.length(); i++) {
             char C = text.charAt(i);
             if (C == ';') {
                 out = append2Array(out, temp);
@@ -552,10 +553,14 @@ public class TP02Q05 {
         return ret;
     }
 
+    static int comp = 0;
+    static int mov = 0;
+
     static void swap(Personagens[] p, int from, int to) {
         Personagens tmp = p[from];
         p[from] = p[to];
         p[to] = tmp;
+        mov += 3;
     }
 
     static void swap(String[] arr, int from, int to) {
@@ -578,6 +583,8 @@ public class TP02Q05 {
             for (int j = (i + 1); j < length; j++) {
                 if (arr[menor].compareTo(arr[j]) > 0) {
                     menor = j;
+
+                    comp++;
                 }
             }
             swap(p, menor, i);
@@ -597,7 +604,7 @@ public class TP02Q05 {
 
     public static void main(String[] args) {
 
-        Personagens[] hPCharacters = readCSV("tmp/characters.csv");
+        Personagens[] hPCharacters = readCSV("/tmp/characters.csv");
 
         try {
 
@@ -605,6 +612,7 @@ public class TP02Q05 {
 
             String buff = in.readLine();
             Personagens[] arrChar = {};
+            
 
             while (!buff.equals("FIM")) {
                 for (Personagens p : hPCharacters) {
@@ -622,7 +630,10 @@ public class TP02Q05 {
                 p.printall();
             }
 
+            BufferedWriter f = new BufferedWriter(new FileWriter("matricula_sequencial.txt"));
+            f.write("820939\t" + comp + "\t" + mov);
             // arrChar = selectionSort(arrChar, "name");
+            f.close();
 
         } catch (Exception e) {
             out.println(e);
