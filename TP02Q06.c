@@ -665,14 +665,14 @@ void print_patronus(Personagens *p)
 
 void print_hogwartsStaff(Personagens *p)
 {
-    printf("false%s", separator);
-    // printf("%s%s", p->hogwartsStaff ? "true" : "false", separator);
+    //printf("false%s", separator);
+    printf("%s%s", p->hogwartsStaff ? "true" : "false", separator);
 }
 
 void print_hogwartsStudent(Personagens *p)
 {
-    printf("false%s", separator);
-    // printf("%s%s", p->hogwartsStudent ? "true" : "false", separator);
+    //printf("false%s", separator);
+    printf("%s%s", p->hogwartsStudent ? "true" : "false", separator);
 }
 
 void print_actorName(Personagens *p)
@@ -682,8 +682,8 @@ void print_actorName(Personagens *p)
 
 void print_alive(Personagens *p)
 {
-    printf("false%s", separator);
-    // printf("%s%s", p->alive ? "true" : "false", separator);
+    //printf("false%s", separator);
+    printf("%s%s", p->alive ? "true" : "false", separator);
 }
 
 // Assuming List is a list of strings
@@ -906,6 +906,11 @@ void read(char *filename, Personagens p[404])
 
 //
 
+double movements = 0;
+double comparations = 0;
+
+//
+
 void swapString(char **p1, char **p2)
 {
     char *tmp = *p1;
@@ -916,8 +921,31 @@ void swapPers(Personagens *p1,Personagens *p2){
     Personagens tmp = *p1;
     *p1 = *p2;
     *p2 = tmp;
+    movements += 3;
 }
+// ------------------------------------------------------------------
+// ------------------------------------------------------------------
 
+// ----------------- SELECTION SORT -----------------
+void selectionsort(Personagens p[404], char** arr, int i ,int len){
+    int menor = i;
+    for (int j = (i + 1); j < len; j++){
+        comparations++;
+        if (strcmp(arr[menor], arr[j]) > 0){
+            menor = j;
+        }
+    }
+    swapString(arr + menor, arr + i);
+    swapPers(p + menor, p + i);
+    i++;
+
+    if (i < (len - 1)){
+        selectionsort(p,arr,i++,len);
+    }
+}
+// --------------------------------------------------
+
+// ----------------- QUICKSORT -----------------
 void quicksort(Personagens p[404], int left, int right,char **arr)
 {
     int i = left, j = right;
@@ -949,6 +977,7 @@ void quicksort(Personagens p[404], int left, int right,char **arr)
         quicksort(p, i, right, arr);
     }
 }
+// -------------------------------------------------------
 
 void sort(Personagens p[404], int len)
 {
@@ -960,14 +989,14 @@ void sort(Personagens p[404], int len)
     }
 
 
-    quicksort(p, 0, len - 1,arr);
+    //quicksort(p, 0, len - 1,arr);
+    selectionsort(p,arr,0,len);
     for(size_t i = 0; i < len;i++){
         free(arr[i]);
     }
     free(arr);
 }
 
-double comparations = 0;
 bool binSearch(Personagens p[404],char *name,int len)
 {
     bool resp = false;
@@ -1034,15 +1063,15 @@ int main()
 
     // SORT
     //printf("Sorting\n");
+    clock_t t = clock();
     sort(a, asize);
+    t = clock() - t;
 
-    /*
     for(int i = 0;i<asize;i++){
         printAllPersonagens(&a[i]);
     }
-    */
-    
 
+    /*
     // SEACRH
     //printf("Scaning\n");
     fgets(r,200,stdin);
@@ -1050,7 +1079,6 @@ int main()
     r[strcspn(r, "\n")] = 0;
     r[strcspn(r, "\r")] = 0;
 
-    clock_t t = clock();
 
     int numb = 0;
     while (strcmp(r, "FIM") != 0)
@@ -1067,9 +1095,9 @@ int main()
         r[strcspn(r, "\n")] = 0;
         r[strcspn(r, "\r")] = 0;
     }
-    t = clock() - t;
+    */
     double timetaken = ((double)t) / CLOCKS_PER_SEC;
 
-    FILE* out = fopen("matricula_binaria.txt","w");
-    fprintf(out,"820939\t%f\t%f",timetaken,comparations);
+    FILE* out = fopen("matricula_selecaoRecursiva.txt","w");
+    fprintf(out,"820939\t%f\t%f",comparations,movements);
 }
