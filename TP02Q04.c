@@ -163,6 +163,8 @@ int add_on_index(List *list, void *data, size_t index)
     data_node->bottom = selected;
 
     list->size += 1;
+
+    return 0;
 }
 
 /*
@@ -287,6 +289,8 @@ size_t set_index(List *list, void *data, size_t index)
     Node *selected = find_index(list, index);
 
     selected->data = data;
+
+    return 0;
 }
 /*
     ██████╗   ███████╗  ████████╗
@@ -336,7 +340,7 @@ List *stringArrayToList(char **text, size_t size)
 
     return list;
 }
-List *print_list(List *list)
+void print_list(List *list)
 {
     Node *selected = list->sky;
 
@@ -849,7 +853,7 @@ void lineToClass(char *text, char **order, Personagens *p)
     free(temp);
 }
 
-void read(char *filename, Personagens p[500])
+void read(char *filename, Personagens p[404])
 {
     if (p == NULL)
     {
@@ -906,63 +910,88 @@ void swapString(char **p1, char **p2)
 {
     char *tmp = *p1;
     *p1 = *p2;
-    *p2 = *tmp;
+    *p2 = tmp;
+}
+void swapPers(Personagens *p1,Personagens *p2){
+    Personagens tmp = *p1;
+    *p1 = *p2;
+    *p2 = tmp;
 }
 
-void quicksort(char *p[404], int left, int right)
+void quicksort(Personagens p[404], int left, int right,char **arr)
 {
     int i = left, j = right, pivot = (left + right) / 2;
     while (i <= j)
     {
-        while (strcmp(p[i], p[pivot]) < 0)
+        while (strcmp(arr[i], arr[pivot]) < 0)
         {
             i++;
         }
-        while (strcmp(p[j], p[pivot]) > 0)
+        while (strcmp(arr[j], arr[pivot]) > 0)
         {
             j--;
         }
         if (i <= j)
         {
-            swapString(p + i, p + j);
+            swapString(arr + i, arr + j);
+            swapPers(p + i, p + j);
+            j--;
+            i++;
         }
     }
     if (left < j)
     {
-        quicksort(p, left, j);
+        quicksort(p, left, j, arr);
     }
     if (i < right)
     {
-        quicksort(p, i, right);
+        quicksort(p, i, right, arr);
     }
 }
 
-void sort(char *p[404], int len)
+void sort(Personagens p[404], int len)
 {
-    quicksort(p, 0, len - 1);
+    char **arr = (char**)malloc(len * sizeof(char*));
+
+    for(size_t i = 0; i < len;i++){
+        arr[i] = (char*)calloc(200, sizeof(char));
+        arr[i] = strdup(p[i].name);
+    }
+
+
+    quicksort(p, 0, len - 1,arr);
+    for(size_t i = 0; i < len;i++){
+        free(arr[i]);
+    }
+    free(arr);
 }
 
-bool binSearch(char *p[404],char *name,int len)
+double comparations = 0;
+bool binSearch(Personagens p[404],char *name,int len)
 {
     bool resp = false;
     int dir = len - 1, esq = 0, meio;
     int comp;
     while (esq <= dir)
     {
+        comparations++;
         meio = (esq + dir) / 2;
-        comp = strcmp(name,p[meio]);
+        comp = strcmp(name,p[meio].name);
         if (comp == 0)
         {
             resp = true;
             esq = len;
+            comparations++;
         }
         else if (comp > 0)
         {
             esq = meio + 1;
+            comparations += 2;
         }
         else
         {
             dir = meio - 1;
+            comparations += 2;
         }
     }
     return resp;
@@ -971,7 +1000,7 @@ bool binSearch(char *p[404],char *name,int len)
 int main()
 {
     Personagens p[404];
-    read("/tmp/characters.csv", p);
+    read("tmp/characters.csv", p);
 
     char *r = (char *)malloc(500 * sizeof(char));
     if (r == NULL)
@@ -992,7 +1021,7 @@ int main()
         {
             if (strcmp(p[i].id, r) == 0)
             {
-                a[i] = p[i];
+                a[asize-1] = p[i];
                 break;
             }
         }
@@ -1000,22 +1029,39 @@ int main()
         r[strcspn(r, "\n")] = 0;
     }
 
+    // SORT
+    //printf("Sorting\n");
     sort(a, asize);
 
-    scanf("%s", r);
+    /*
+    for(int i = 0;i<asize;i++){
+        printAllPersonagens(&a[i]);
+    }
+    */
+
+    // SEACRH
+    //printf("Scaning\n");
+    fgets(r,200,stdin);
+    fgets(r,200,stdin);
     r[strcspn(r, "\n")] = 0;
+
+    clock_t t = clock();
+
     while (strcmp(r, "FIM") != 0)
     {
-        asize++;
-        for (size_t i = 0; i < 404; i++)
+        // Binary Search
+        if (binSearch(a,r,asize))
         {
-            if (binSearch(a,r,asize))
-            {
-                printf("SIM");
-            }
-            else printf("NAO");
+            printf("SIM\n");
         }
-        scanf("%s", r);
+        else printf("NAO\n");
+
+        fgets(r,200,stdin);
         r[strcspn(r, "\n")] = 0;
     }
+    t = clock() - t;
+    double timetaken = ((double)t) / CLOCKS_PER_SEC;
+
+    FILE* out = fopen("matricula_binaria.txt","w");
+    fprintf(out,"820939\t%f\t%f",timetaken,comparations);
 }
