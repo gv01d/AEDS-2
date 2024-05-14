@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
-public class TP02Q09 {
+public class TP02Q11 {
     static BufferedReader in = new BufferedReader(new InputStreamReader(System.in, Charset.forName("UTF-8")));
     static PrintStream out = new PrintStream(System.out, true);
 
@@ -596,6 +596,58 @@ public class TP02Q09 {
 	}
     */
 
+    // ------------------------------------ COUNTING SORT ------------------------------------
+
+    static int getBiggerYear(Personagens[] p,int len){
+        int ret = p[0].yearOfBirth;
+
+        for(int i = 0; i < len;i++){
+            if(p[i].yearOfBirth > ret){
+                ret = p[i].yearOfBirth;
+            }
+        }
+
+        return ret;
+    }
+
+    static Personagens[] countingSortYear(Personagens[] p,String[] att,int len){
+        int[] count = new int[getBiggerYear(p,len) + 1];
+        Personagens[] tmp = new Personagens[len];
+
+        // create count
+        for(int i = 0; i < count.length; count[i] = 0, i++);
+
+        // 
+        for(int i = 0; i < len; count[p[i].yearOfBirth]++, i++);
+
+        for(int i = 1; i < count.length; count[i] += count[i-1], i++);
+
+        //
+        for(int i = len-1; i >= 0; tmp[count[p[i].yearOfBirth]-1] = p[i], mov++, count[p[i].yearOfBirth]--, i--);
+
+        int ctmp = tmp[0].yearOfBirth;
+        int finish = 0, start = 0;
+        for(int i = 1; i < len;i++){
+            comp++;
+            if (tmp[i].yearOfBirth == ctmp) {
+                finish++;
+            }
+            else{
+                if (finish - start > 0) {
+                    sort(tmp, att, start, finish+1);
+                }
+                ctmp = tmp[i].yearOfBirth;
+                start = i;
+                finish = i;
+            }
+        }
+
+        for(int i = 0; i< len; p[i] = tmp[i], i++);
+
+        return p;
+    }
+    // ---------------------------------------------------------------------------------------
+
     // ------------------------------------ HEAP SORT ------------------------------------
 
     //
@@ -660,13 +712,13 @@ public class TP02Q09 {
 
     // ------------------------------------ HEAP SORT ------------------------------------
 
-    static Personagens[] insertionSort(Personagens[] p,String[] arr, int length){
-        for (int i = 1; i < length;i++){
+    static Personagens[] insertionSort(Personagens[] p,String[] arr,int start, int length){
+        for (int i = 1+start; i < length;i++){
             String tmp = arr[i];
             Personagens tmP = p[i];
             int j = i - 1;
 
-            while ((j >= 0) && (arr[j].compareTo(tmp) > 0)) {
+            while ((j >= start) && (arr[j].compareTo(tmp) > 0)) {
                 arr[j+1] = arr[j];
                 p[j+1] = p[j];
                 j--;
@@ -683,9 +735,9 @@ public class TP02Q09 {
         return p;
     }
 
-    static Personagens[] selectionSort(Personagens[] p, String[] arr, int length) {
+    static Personagens[] selectionSort(Personagens[] p, String[] arr,int start, int length) {
 
-        for (int i = 0; i < (length - 1); i++) {
+        for (int i = start; i < (length - 1); i++) {
             int menor = i;
             for (int j = (i + 1); j < length; j++) {
                 if (arr[menor].compareTo(arr[j]) > 0) {
@@ -701,16 +753,14 @@ public class TP02Q09 {
         return p;
     }
 
-    static Personagens[] sort(Personagens[] p, String[] att, int length){
+    static Personagens[] sort(Personagens[] p, String[] att, int start, int length){
         String[] arr = new String[length];
 
-        int w = 0;
-        for (Personagens c : p) {
-            arr[w] = reflectionFieldToString(att, c);
-            w++;
+        for (int i = start; i < length;i++) {
+            arr[i] = reflectionFieldToString(att, p[i]);
         }
 
-        return heapSort(p, arr, length);
+        return selectionSort(p, arr,start, length);
 
     }
 
@@ -728,7 +778,7 @@ public class TP02Q09 {
 
         try {
 
-            String[] att = { "hairColour","name" };
+            String[] att = { "name" };
 
             String buff = in.readLine();
             Personagens[] arrChar = {};
@@ -750,13 +800,13 @@ public class TP02Q09 {
                 buff = in.readLine();
             }
 
-            sort(arrChar, att, arrChar.length);
+            countingSortYear(arrChar, att, arrChar.length);
 
             for (Personagens p : arrChar) {
                 p.printall();
             }
 
-            BufferedWriter f = new BufferedWriter(new FileWriter("matricula_heapsort.txt"));
+            BufferedWriter f = new BufferedWriter(new FileWriter("matricula_countingsort.txt"));
             f.write("820939\t" + comp + "\t" + mov);
             // arrChar = selectionSort(arrChar, "name");
             f.close();
@@ -766,3 +816,4 @@ public class TP02Q09 {
         }
     }
 }
+

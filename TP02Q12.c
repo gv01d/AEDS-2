@@ -926,6 +926,20 @@ void swapPers(Personagens *p1,Personagens *p2){
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
 
+// ----------------- BUBBLE SORT -----------------
+void bubbleSort(Personagens p[404],char** arr,int len){
+    for(size_t i = 0;i < len-1;i++){
+        for(size_t j = 0;j < len-1;j++){
+            if(strcmp(arr[j],arr[j+1]) > 0){
+                swapPers(p + j,p + j + 1);
+                swapString(arr + j,arr + j + 1);
+            }
+            comparations++;
+        }
+    }
+}
+// -----------------------------------------------
+
 // ----------------- SHELL SORT -----------------
 void shellSort(Personagens p[404],char** arr,int len){
     int jmp = 1;
@@ -937,29 +951,20 @@ void shellSort(Personagens p[404],char** arr,int len){
     while(jmp < len){
         jmp = 3 * jmp + 1;
     }
-
-    jmp = (jmp - 1)/3;
     while(jmp > 0){
         for(selected = jmp;selected < len;selected++){
             tmp = arr[selected];
             tmP = p[selected];
             next = selected;
-
-            while((next > jmp - 1) && strcmp(tmp,arr[next-jmp]) < 0 ){
+            while(next > jmp - 1 && tmp <= arr[next-jmp]){
                 arr[next] = arr[next-jmp];
                 p[next] = p[next-jmp];
-                next -= jmp;
-
-                movements++;
-                comparations++;
+                next = next - jmp;
             }
             arr[next] = tmp;
             p[next] = tmP;
-
-            movements++;
-            comparations++;
         }
-        jmp = (jmp - 1)/3;
+        jmp = jmp/3;
     }
 }
 // ----------------------------------------------
@@ -993,18 +998,24 @@ void quicksort(Personagens p[404], int left, int right,char **arr)
         while (strcmp(arr[i], pivot) < 0)
         {
             i++;
+            comparations++;
         }
         while (strcmp(arr[j], pivot) > 0)
         {
             j--;
+            comparations++;
         }
         if (i <= j)
         {
             swapString(arr + i, arr + j);
             swapPers(p + i, p + j);
+
+            movements++;
             j--;
             i++;
         }
+
+        comparations += 3;
     }
     if (left < j)
     {
@@ -1025,7 +1036,7 @@ void sort(Personagens p[404], int len)
     for(size_t i = 0; i < len;i++){
         arr[i] = (char*)calloc(500, sizeof(char));
         memset(tmp, '\0', 500);
-        strcat(tmp,strdup(p[i].eyeColour));
+        strcat(tmp,strdup(p[i].hairColour));
         strcat(tmp," ");
         strcat(tmp,strdup(p[i].name));
         arr[i] = strdup(tmp);
@@ -1033,7 +1044,7 @@ void sort(Personagens p[404], int len)
 
 
     //quicksort(p, 0, len - 1,arr);
-    shellSort(p,arr,len);
+    bubbleSort(p,arr,len);
     for(size_t i = 0; i < len;i++){
         free(arr[i]);
     }
@@ -1142,6 +1153,6 @@ int main()
     */
     double timetaken = ((double)t) / CLOCKS_PER_SEC;
 
-    FILE* out = fopen("matricula_selecaoRecursiva.txt","w");
+    FILE* out = fopen("matricula_bubblesort.txt","w");
     fprintf(out,"820939\t%f\t%f",comparations,movements);
 }

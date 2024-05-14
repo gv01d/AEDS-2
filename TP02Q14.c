@@ -926,6 +926,62 @@ void swapPers(Personagens *p1,Personagens *p2){
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
 
+// -------------------- RADIX SORT --------------------
+void radcountingSort(Personagens p[404],char** arr, int len, int g) {
+    int count[128];
+    Personagens output[404];
+    char tmp[len][500];
+
+    //Inicializar cada posicao do array de contagem 
+    for (int i = 0; i < 128; count[i] = 0, i++);
+
+    //Agora, o count[i] contem o numero de elemento iguais a i
+    for (int i = 0; i < len; i++) {
+        count[arr[i][g]]++;
+    }
+
+    //Agora, o count[i] contem o numero de elemento menores ou iguais a i
+    for (int i = 1; i < 128; i++) {
+        count[i] += count[i-1];
+    }
+
+    //Ordenando
+    for (int i = len-1; i >= 0; i--) {
+        output[count[arr[i][g]] - 1] = p[i];
+
+        strcpy(tmp[count[arr[i][g] - 1]] , arr[i]);
+        count[arr[i][g]]--;
+        movements++;
+        comparations++;
+    }
+
+    //Copiando para o array original
+    for (int i = 0; i < len; i++) {
+        p[i] = output[i];
+        strcpy(arr[i],tmp[i]);
+    }
+}
+void radixsort(Personagens p[404],char** arr, int len){
+    for(int g = 0;g < strlen(arr[0]) ;g++){
+        radcountingSort(p,arr,len,g);
+    }
+}
+// ----------------------------------------------------
+
+// ----------------- BUBBLE SORT -----------------
+void bubbleSort(Personagens p[404],char** arr,int len){
+    for(size_t i = 0;i < len-1;i++){
+        for(size_t j = 0;j < len-1;j++){
+            if(strcmp(arr[j],arr[j+1]) > 0){
+                swapPers(p + j,p + j + 1);
+                swapString(arr + j,arr + j + 1);
+            }
+            comparations++;
+        }
+    }
+}
+// -----------------------------------------------
+
 // ----------------- SHELL SORT -----------------
 void shellSort(Personagens p[404],char** arr,int len){
     int jmp = 1;
@@ -937,29 +993,20 @@ void shellSort(Personagens p[404],char** arr,int len){
     while(jmp < len){
         jmp = 3 * jmp + 1;
     }
-
-    jmp = (jmp - 1)/3;
     while(jmp > 0){
         for(selected = jmp;selected < len;selected++){
             tmp = arr[selected];
             tmP = p[selected];
             next = selected;
-
-            while((next > jmp - 1) && strcmp(tmp,arr[next-jmp]) < 0 ){
+            while(next > jmp - 1 && tmp <= arr[next-jmp]){
                 arr[next] = arr[next-jmp];
                 p[next] = p[next-jmp];
-                next -= jmp;
-
-                movements++;
-                comparations++;
+                next = next - jmp;
             }
             arr[next] = tmp;
             p[next] = tmP;
-
-            movements++;
-            comparations++;
         }
-        jmp = (jmp - 1)/3;
+        jmp = jmp/3;
     }
 }
 // ----------------------------------------------
@@ -993,18 +1040,24 @@ void quicksort(Personagens p[404], int left, int right,char **arr)
         while (strcmp(arr[i], pivot) < 0)
         {
             i++;
+            comparations++;
         }
         while (strcmp(arr[j], pivot) > 0)
         {
             j--;
+            comparations++;
         }
         if (i <= j)
         {
             swapString(arr + i, arr + j);
             swapPers(p + i, p + j);
+
+            movements++;
             j--;
             i++;
         }
+
+        comparations += 3;
     }
     if (left < j)
     {
@@ -1025,15 +1078,13 @@ void sort(Personagens p[404], int len)
     for(size_t i = 0; i < len;i++){
         arr[i] = (char*)calloc(500, sizeof(char));
         memset(tmp, '\0', 500);
-        strcat(tmp,strdup(p[i].eyeColour));
-        strcat(tmp," ");
-        strcat(tmp,strdup(p[i].name));
+        strcat(tmp,strdup(p[i].id));
         arr[i] = strdup(tmp);
     }
 
 
     //quicksort(p, 0, len - 1,arr);
-    shellSort(p,arr,len);
+    radixsort(p,arr,len);
     for(size_t i = 0; i < len;i++){
         free(arr[i]);
     }
@@ -1142,6 +1193,6 @@ int main()
     */
     double timetaken = ((double)t) / CLOCKS_PER_SEC;
 
-    FILE* out = fopen("matricula_selecaoRecursiva.txt","w");
+    FILE* out = fopen("matricula_radixsort.txt","w");
     fprintf(out,"820939\t%f\t%f",comparations,movements);
 }

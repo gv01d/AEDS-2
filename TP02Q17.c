@@ -917,23 +917,137 @@ void swapString(char **p1, char **p2)
     *p1 = *p2;
     *p2 = tmp;
 }
+void swapString2(char p[404][500], int i, int j)
+{
+    char tmp[500];
+    strcpy(tmp,p[i]);
+    strcpy(p[i],p[j]);
+    strcpy(p[j],tmp);
+}
 void swapPers(Personagens *p1,Personagens *p2){
     Personagens tmp = *p1;
     *p1 = *p2;
     *p2 = tmp;
     movements += 3;
 }
+
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
+
+//
+
+static int getSmaller(char arr[404][500],int i, int len){
+        int ret;
+        if (2*i == len || strcmp(arr[2*i],arr[2*i+1]) < 0) {
+            ret = 2*i;
+        }
+        else{
+            ret = 2*i+1;
+        }
+        return ret;
+    }
+
+static void heapSort(Personagens p[404],char arr[404][500],int len){
+
+    // Move everything by 1 in array
+    char tmparr[404][500];
+    Personagens tmpP[404];
+    for(int i = 0;i < len;i++){
+        strcpy(tmparr[i+1],arr[i]);
+        tmpP[i+1] = p[i];
+    }
+
+    // Build Heap
+    for(int tam = 2;tam <= len;tam++){
+        for(int i = tam; i > 1 && strcmp(tmparr[i],tmparr[i/2]) < 0;i/=2){
+            swapPers(tmpP + i, tmpP + i/2);
+            swapString2(tmparr ,i,i/2);
+            comparations++;
+        }
+        comparations++;
+    }
+
+    // The sorting
+    int tam = len;
+    while(tam > (len-10)){
+        swapPers(tmpP + 1, tmpP + tam);
+        swapString2(tmparr,1,tam--);
+        // Rebuild
+        int i = 1;
+        while (i <= tam/2) {
+            int sibling = getSmaller(tmparr, i, tam);
+            comparations++;
+            if( strcmp(tmparr[i],tmparr[sibling]) > 0){
+                swapPers(tmpP + i, tmpP + sibling);
+                swapString2(tmparr, i, sibling);
+                i = sibling;
+            }
+            else{
+                i = tam;
+            }
+        }
+    }
+    
+    // Move back
+    for(int i = 0;i < len;i++){
+        strcpy(arr[len-i-1],tmparr[i+1]);
+        p[len-i-1] = tmpP[i+1];
+    }
+}
+
+
+//
+
+
+// -------------------- RADIX SORT --------------------
+void radcountingSort(Personagens p[404],char** arr, int len, int g) {
+    int count[128];
+    Personagens output[404];
+    char tmp[len][500];
+
+    //Inicializar cada posicao do array de contagem 
+    for (int i = 0; i < 128; count[i] = 0, i++);
+
+    //Agora, o count[i] contem o numero de elemento iguais a i
+    for (int i = 0; i < len; i++) {
+        count[arr[i][g]]++;
+    }
+
+    //Agora, o count[i] contem o numero de elemento menores ou iguais a i
+    for (int i = 1; i < 128; i++) {
+        count[i] += count[i-1];
+    }
+
+    //Ordenando
+    for (int i = len-1; i >= 0; i--) {
+        output[count[arr[i][g]] - 1] = p[i];
+
+        strcpy(tmp[count[arr[i][g] - 1]] , arr[i]);
+        count[arr[i][g]]--;
+        movements++;
+        comparations++;
+    }
+
+    //Copiando para o array original
+    for (int i = 0; i < len; i++) {
+        p[i] = output[i];
+        strcpy(arr[i],tmp[i]);
+    }
+}
+void radixsort(Personagens p[404],char** arr, int len){
+    for(int g = 0;g < strlen(arr[0]) ;g++){
+        radcountingSort(p,arr,len,g);
+    }
+}
+// ----------------------------------------------------
 
 // ----------------- BUBBLE SORT -----------------
 void bubbleSort(Personagens p[404],char** arr,int len){
     for(size_t i = 0;i < len-1;i++){
         for(size_t j = 0;j < len-1;j++){
-            if(arr[j] > arr[j+1]){
-                arr[j] = arr[j+1];
-                p[j] = p[j+1]
-                movements++;
+            if(strcmp(arr[j],arr[j+1]) > 0){
+                swapPers(p + j,p + j + 1);
+                swapString(arr + j,arr + j + 1);
             }
             comparations++;
         }
@@ -1031,26 +1145,21 @@ void quicksort(Personagens p[404], int left, int right,char **arr)
 
 void sort(Personagens p[404], int len)
 {
-    char **arr = (char**)malloc(len * sizeof(char*));
-    char *tmp = (char*)calloc(500, sizeof(char));
+    char arr[404][500];
+    char tmp[500] = "";
 
     for(size_t i = 0; i < len;i++){
-        arr[i] = (char*)calloc(500, sizeof(char));
         memset(tmp, '\0', 500);
         strcat(tmp,strdup(p[i].hairColour));
-        strcat(tmp," ");
+        strcat(tmp,strdup("  "));
         strcat(tmp,strdup(p[i].name));
-        arr[i] = strdup(tmp);
+
+        strcpy(arr[i],tmp);
     }
 
 
     //quicksort(p, 0, len - 1,arr);
-    bubbleSort(p,arr,0,len);
-    for(size_t i = 0; i < len;i++){
-        free(arr[i]);
-    }
-    free(arr);
-    free(tmp);
+    heapSort(p,arr,len);
 }
 
 bool binSearch(Personagens p[404],char *name,int len)
@@ -1123,7 +1232,7 @@ int main()
     sort(a, asize);
     t = clock() - t;
 
-    for(int i = 0;i<asize;i++){
+    for(int i = 0;i<10;i++){
         printAllPersonagens(&a[i]);
     }
 
@@ -1154,6 +1263,6 @@ int main()
     */
     double timetaken = ((double)t) / CLOCKS_PER_SEC;
 
-    FILE* out = fopen("matricula_quicksort.txt","w");
+    FILE* out = fopen("matricula_radixsort.txt","w");
     fprintf(out,"820939\t%f\t%f",comparations,movements);
 }

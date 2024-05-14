@@ -3,6 +3,34 @@
   "configurations": [
     {
       "type": "java",
+      "name": "TP02Q18",
+      "request": "launch",
+      "mainClass": "TP02Q18",
+      "projectName": "AEDS-2_6f20c139"
+    },
+    {
+      "type": "java",
+      "name": "TP02Q15",
+      "request": "launch",
+      "mainClass": "TP02Q15",
+      "projectName": "AEDS-2_6f20c139"
+    },
+    {
+      "type": "java",
+      "name": "TP02Q13",
+      "request": "launch",
+      "mainClass": "TP02Q13",
+      "projectName": "AEDS-2_6f20c139"
+    },
+    {
+      "type": "java",
+      "name": "TP02Q11",
+      "request": "launch",
+      "mainClass": "TP02Q11",
+      "projectName": "AEDS-2_6f20c139"
+    },
+    {
+      "type": "java",
       "name": "TP02Q07",
       "request": "launch",
       "mainClass": "TP02Q07",

@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
-public class TP02Q09 {
+public class TP02Q16 {
     static BufferedReader in = new BufferedReader(new InputStreamReader(System.in, Charset.forName("UTF-8")));
     static PrintStream out = new PrintStream(System.out, true);
 
@@ -596,6 +596,96 @@ public class TP02Q09 {
 	}
     */
 
+    // ------------------------------------ MERGE SORT ------------------------------------
+    static void mergeSort(Personagens[] p,String[] arr,int left,int right){
+        if (left < right) {
+            int mid = (left + right)/2;
+            mergeSort(p, arr, left, mid);
+            mergeSort(p, arr, mid+1, right);
+            inbetween(p, arr, left, mid, right);
+        }
+    }
+    static void inbetween(Personagens p[],String[] arr,int left,int mid,int right){
+        int sub1 = mid - left + 1;
+        int sub2 = right - mid;
+        int i,j,k;
+        
+        Personagens[] p1 = new Personagens[sub1+1];
+        for ( i = 0; i < sub1; p1[i] = p[left + i] ,i++);
+        String[] a1 = new String[sub1+1];
+        for ( i = 0; i < sub1; a1[i] = arr[left + i] ,i++);
+        
+        Personagens[] p2 = new Personagens[sub2+1];
+        for ( j = 0; j < sub2; p2[j] = p[mid + j + 1] ,j++);
+        String[] a2 = new String[sub2+1];
+        for ( j = 0; j < sub2; a2[j] = arr[mid + j + 1] ,j++);
+
+        a1[i] = a2[j] = "~~~~~~~~";
+        p1[i] = p2[j] = new Personagens();
+        
+        for(i = j = 0, k = left; k <= right; k++){
+            boolean test = (a1[i].compareTo(a2[j]) <= 0);
+            p[k] = test ? p1[i] : p2[j];
+            arr[k] = test ? a1[i++] : a2[j++];
+            mov++;
+            comp++;
+        }
+    }
+    // ------------------------------------------------------------------------------------
+    
+
+    // ------------------------------------ COUNTING SORT ------------------------------------
+
+    static int getBiggerYear(Personagens[] p,int len){
+        int ret = p[0].yearOfBirth;
+
+        for(int i = 0; i < len;i++){
+            if(p[i].yearOfBirth > ret){
+                ret = p[i].yearOfBirth;
+            }
+        }
+
+        return ret;
+    }
+
+    static Personagens[] countingSortYear(Personagens[] p,String[] att,int len){
+        int[] count = new int[getBiggerYear(p,len) + 1];
+        Personagens[] tmp = new Personagens[len];
+
+        // create count
+        for(int i = 0; i < count.length; count[i] = 0, i++);
+
+        // 
+        for(int i = 0; i < len; count[p[i].yearOfBirth]++, i++);
+
+        for(int i = 1; i < count.length; count[i] += count[i-1], i++);
+
+        //
+        for(int i = len-1; i >= 0; tmp[count[p[i].yearOfBirth]-1] = p[i], mov++, count[p[i].yearOfBirth]--, i--);
+
+        int ctmp = tmp[0].yearOfBirth;
+        int finish = 0, start = 0;
+        for(int i = 1; i < len;i++){
+            comp++;
+            if (tmp[i].yearOfBirth == ctmp) {
+                finish++;
+            }
+            else{
+                if (finish - start > 0) {
+                    sort(tmp, att, start, finish+1);
+                }
+                ctmp = tmp[i].yearOfBirth;
+                start = i;
+                finish = i;
+            }
+        }
+
+        for(int i = 0; i< len; p[i] = tmp[i], i++);
+
+        return p;
+    }
+    // ---------------------------------------------------------------------------------------
+
     // ------------------------------------ HEAP SORT ------------------------------------
 
     //
@@ -660,13 +750,13 @@ public class TP02Q09 {
 
     // ------------------------------------ HEAP SORT ------------------------------------
 
-    static Personagens[] insertionSort(Personagens[] p,String[] arr, int length){
-        for (int i = 1; i < length;i++){
+    static Personagens[] insertionSort(Personagens[] p,String[] arr,int start, int length){
+        for (int i = 1+start; i < length;i++){
             String tmp = arr[i];
             Personagens tmP = p[i];
             int j = i - 1;
 
-            while ((j >= 0) && (arr[j].compareTo(tmp) > 0)) {
+            while ((j >= start) && (arr[j].compareTo(tmp) > 0)) {
                 arr[j+1] = arr[j];
                 p[j+1] = p[j];
                 j--;
@@ -682,10 +772,54 @@ public class TP02Q09 {
 
         return p;
     }
+    static Personagens[] insertionSort(Personagens[] p,String[] arr,int start, int length,int k){
+        for (int i = 0 + start; i < k;i++){
+            int menor = i;
+            
+            for (int l = (i + 1); l < length; l++) {
+                if (arr[menor].compareTo(arr[l]) > 0) {
+                    menor = l;
+                    
+                    comp++;
+                }
+            }
+            String tmp = arr[menor];
+            Personagens tmP = p[menor];
 
-    static Personagens[] selectionSort(Personagens[] p, String[] arr, int length) {
+            for(int j = menor ; j > i ; j--){
+                arr[j] = arr[j-1];
+                p[j] = p[j-1];
+                mov++;
+            }
+            arr[i] = tmp;
+            p[i] = tmP;
+            comp++;
+            mov++;
+        }
 
-        for (int i = 0; i < (length - 1); i++) {
+        return p;
+    }
+
+    static Personagens[] selectionSort(Personagens[] p, String[] arr,int start, int length) {
+
+        for (int i = start; i < (length - 1); i++) {
+            int menor = i;
+            for (int j = (i + 1); j < length; j++) {
+                if (arr[menor].compareTo(arr[j]) > 0) {
+                    menor = j;
+
+                    comp++;
+                }
+            }
+            swap(p, menor, i);
+            swap(arr, i, menor);
+        }
+
+        return p;
+    }
+    static Personagens[] selectionSort(Personagens[] p, String[] arr,int start, int length,int k) {
+
+        for (int i = start; i < k; i++) {
             int menor = i;
             for (int j = (i + 1); j < length; j++) {
                 if (arr[menor].compareTo(arr[j]) > 0) {
@@ -701,18 +835,25 @@ public class TP02Q09 {
         return p;
     }
 
-    static Personagens[] sort(Personagens[] p, String[] att, int length){
+    static void sort(Personagens[] p, String[] att, int start, int length){
         String[] arr = new String[length];
 
-        int w = 0;
-        for (Personagens c : p) {
-            arr[w] = reflectionFieldToString(att, c);
-            w++;
+        for (int i = start; i < length;i++) {
+            arr[i] = reflectionFieldToString(att, p[i]);
         }
 
-        return heapSort(p, arr, length);
-
+        insertionSort(p, arr,start, length);
     }
+    static void sort(Personagens[] p, String[] att, int start, int length,int k){
+        String[] arr = new String[length];
+
+        for (int i = start; i < length;i++) {
+            arr[i] = reflectionFieldToString(att, p[i]);
+        }
+
+        insertionSort(p, arr,start, length,k+1);
+    }
+
 
     //
 
@@ -728,7 +869,7 @@ public class TP02Q09 {
 
         try {
 
-            String[] att = { "hairColour","name" };
+            String[] att = { "dateOfBirth","name" };
 
             String buff = in.readLine();
             Personagens[] arrChar = {};
@@ -750,13 +891,13 @@ public class TP02Q09 {
                 buff = in.readLine();
             }
 
-            sort(arrChar, att, arrChar.length);
+            sort(arrChar, att, 0, arrChar.length,10);
 
-            for (Personagens p : arrChar) {
-                p.printall();
+            for (int i = 0; i < 10;i++) {
+                arrChar[i].printall();
             }
 
-            BufferedWriter f = new BufferedWriter(new FileWriter("matricula_heapsort.txt"));
+            BufferedWriter f = new BufferedWriter(new FileWriter("matricula_mergesort.txt"));
             f.write("820939\t" + comp + "\t" + mov);
             // arrChar = selectionSort(arrChar, "name");
             f.close();
