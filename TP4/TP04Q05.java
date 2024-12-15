@@ -1,0 +1,1010 @@
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.lang.reflect.Field;
+import java.lang.Object;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.swing.plaf.synth.SynthEditorPaneUI;
+
+public class TP04Q05 {
+    static BufferedReader in = new BufferedReader(new InputStreamReader(System.in, Charset.forName("UTF-8")));
+    static PrintStream out = new PrintStream(System.out, true);
+
+    static String separation = " ## ";
+
+    static public class Personagens implements Comparable<Personagens> {
+
+        String id;
+        String name;
+        List<String> alternate_names;
+        String house;
+        String ancestry;
+        String species;
+        String patronus;
+        Boolean hogwartsStaff;
+        Boolean hogwartsStudent;
+        String actorName;
+        Boolean alive;
+        List<String> alternate_actors;
+        LocalDate dateOfBirth;
+        int yearOfBirth;
+        String eyeColour;
+        String gender;
+        String hairColour;
+        Boolean wizard;
+
+        public String getId() {
+            return this.id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public List<String> getAlternate_names() {
+            return alternate_names;
+        }
+
+        public void setAlternate_names(List<String> alternate_names) {
+            this.alternate_names = alternate_names;
+        }
+
+        public void setAlternate_names(String[] alternate_names) {
+            this.alternate_names = Arrays.asList(alternate_names);
+        }
+
+        public String getHouse() {
+            return house;
+        }
+
+        public void setHouse(String house) {
+            this.house = house;
+        }
+
+        public String getAncestry() {
+            return ancestry;
+        }
+
+        public void setAncestry(String ancestry) {
+            this.ancestry = ancestry;
+        }
+
+        public String getSpecies() {
+            return species;
+        }
+
+        public void setSpecies(String species) {
+            this.species = species;
+        }
+
+        public String getPatronus() {
+            return patronus;
+        }
+
+        public void setPatronus(String patronus) {
+            this.patronus = patronus;
+        }
+
+        public Boolean getHogwartsStaff() {
+            return hogwartsStaff;
+        }
+
+        public void setHogwartsStaff(Boolean hogwartsStaff) {
+            this.hogwartsStaff = hogwartsStaff;
+        }
+
+        public void setHogwartsStaff(String hogwartsStaff) {
+            this.hogwartsStaff = hogwartsStaff.equals("VERDADEIRO");
+        }
+
+        public boolean getHogwartsStudent() {
+            return hogwartsStudent;
+        }
+
+        public void setHogwartsStudent(Boolean hogwartsStudent) {
+            this.hogwartsStudent = hogwartsStudent;
+        }
+
+        public void setHogwartsStudent(String hogwartsStudent) {
+            this.hogwartsStudent = hogwartsStudent.equals("VERDADEIRO");
+        }
+
+        public String getActorName() {
+            return actorName;
+        }
+
+        public void setActorName(String actorName) {
+            this.actorName = actorName;
+        }
+
+        public Boolean getAlive() {
+            return alive;
+        }
+
+        public void setAlive(Boolean alive) {
+            this.alive = alive;
+        }
+
+        public List<String> getAlternate_actors() {
+            return alternate_actors;
+        }
+
+        public void setAlive(String alive) {
+            this.alive = alive.equals("VERDADEIRO");
+        }
+
+        public void setAlternate_actors(List<String> alternate_actors) {
+            this.alternate_actors = alternate_actors;
+        }
+
+        public void setAlternate_actors(String[] alternate_actors) {
+            this.alternate_actors = Arrays.asList(alternate_actors);
+        }
+
+        public LocalDate getDateOfBirth() {
+            return dateOfBirth;
+        }
+
+        public void setDateOfBirth(LocalDate dateOfBirth) {
+            this.dateOfBirth = dateOfBirth;
+        }
+
+        public void setDateOfBirth(String dateOfBirth) {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-M-yyyy");
+            this.dateOfBirth = LocalDate.parse(dateOfBirth, dtf);
+        }
+
+        public int getYearOfBirth() {
+            return yearOfBirth;
+        }
+
+        public void setYearOfBirth(int yearOfBirth) {
+            this.yearOfBirth = yearOfBirth;
+        }
+
+        public void setYearOfBirth(String yearOfBirth) {
+            this.yearOfBirth = Integer.parseInt(yearOfBirth);
+        }
+
+        public String getEyeColour() {
+            return eyeColour;
+        }
+
+        public void setEyeColour(String eyeColour) {
+            this.eyeColour = eyeColour;
+        }
+
+        public String getGender() {
+            return gender;
+        }
+
+        public void setGender(String gender) {
+            this.gender = gender;
+        }
+
+        public String getHairColour() {
+            return hairColour;
+        }
+
+        public void setHairColour(String hairColour) {
+            this.hairColour = hairColour;
+        }
+
+        public Boolean getWizard() {
+            return wizard;
+        }
+
+        public void setWizard(Boolean wizard) {
+
+            this.wizard = wizard;
+        }
+
+        public void setWizard(String wizard) {
+
+            this.wizard = wizard.equals("VERDADEIRO");
+        }
+
+        Personagens(String name) {
+            this.name = name;
+
+            id = "";
+            alternate_names = null;
+            house = "";
+            ancestry = "";
+            species = "";
+            patronus = "";
+            hogwartsStaff = false;
+            hogwartsStudent = false;
+            actorName = "";
+            alive = false;
+            dateOfBirth = null;
+            yearOfBirth = 0;
+            eyeColour = "";
+            gender = "";
+            hairColour = "";
+            wizard = false;
+        }
+
+        Personagens() {
+            name = "";
+            id = "";
+            alternate_names = null;
+            house = "";
+            ancestry = "";
+            species = "";
+            patronus = "";
+            hogwartsStaff = false;
+            hogwartsStudent = false;
+            actorName = "";
+            alive = false;
+            dateOfBirth = null;
+            yearOfBirth = 0;
+            eyeColour = "";
+            gender = "";
+            hairColour = "";
+            wizard = false;
+        }
+        //
+
+        // #=========================================================================#
+        // # - - - - - - - - - - - - - - [ O U T P U T ] - - - - - - - - - - - - - - #
+        // #=========================================================================#
+
+        //
+
+        // ------------------------------
+
+        void printall() {
+            idOut();
+            nameOut();
+            alternate_namesOut();
+            houseOut();
+            ancestryOut();
+            speciesOut();
+            patronusOut();
+            hogwartsStaffOut();
+            hogwartsStudentOut();
+            actorNameOut();
+            aliveOut();
+            dateOfBirthOut();
+            yearOfBirthOut();
+            eyeColourOut();
+            genderOut();
+            hairColourOut();
+            wizardOut();
+        }
+
+        // ------------------------------
+        void idOut() {
+            out.print(id + separation);
+        }
+
+        void nameOut() {
+            out.print(name + separation);
+        }
+
+        void alternate_namesOut() {
+            String[] temp = alternate_names.toArray(new String[0]);
+            out.print("{");
+            for (int i = 0; i < temp.length; i++) {
+                out.print(temp[i]);
+                if (i + 1 < temp.length)
+                    out.print(",");
+            }
+            out.print("}" + separation);
+
+        }
+
+        void houseOut() {
+            out.print(house + separation);
+        }
+
+        void ancestryOut() {
+            out.print(ancestry + separation);
+        }
+
+        void speciesOut() {
+            out.print(species + separation);
+        }
+
+        void patronusOut() {
+            out.print(patronus + separation);
+        }
+
+        void hogwartsStaffOut() {
+            out.print(hogwartsStaff + separation);
+        }
+
+        void hogwartsStudentOut() {
+            out.print(hogwartsStudent + separation);
+        }
+
+        void actorNameOut() {
+            out.print(actorName + separation);
+        }
+
+        void aliveOut() {
+            out.print(alive + separation);
+        }
+
+        void dateOfBirthOut() {
+            out.print(((dateOfBirth.getDayOfMonth() < 10) ? "0" + dateOfBirth.getDayOfMonth()
+                    : dateOfBirth.getDayOfMonth()) + "-"
+                    + ((dateOfBirth.getMonthValue() < 10) ? "0" + dateOfBirth.getMonthValue()
+                            : dateOfBirth.getMonthValue())
+                    + "-" + dateOfBirth.getYear()
+                    + separation);
+        }
+
+        void yearOfBirthOut() {
+            out.print(yearOfBirth + separation);
+        }
+
+        void eyeColourOut() {
+            out.print(eyeColour + separation);
+        }
+
+        void genderOut() {
+            out.print(gender + separation);
+        }
+
+        void hairColourOut() {
+            out.print(hairColour + separation);
+        }
+
+        void wizardOut() {
+            out.print(wizard);
+        }
+
+        @Override
+        public int compareTo(Personagens o) {
+            String p1 = reflectionFieldToString(compItens, this);
+            String p2 = reflectionFieldToString(compItens, o);
+
+            return p1.compareTo(p2);
+        }
+
+    }
+
+    static String compItens[];
+
+    static void setCompItens(String comp[]) {
+        compItens = comp;
+    }
+
+    static String reflectionFieldToString(String[] fields, Personagens p) {
+        String ret = "";
+
+        try {
+            Field field;
+            for (String s : fields) {
+
+                field = Personagens.class.getDeclaredField(s);
+
+                if (s.equals("dateOfBirth")) {
+                    LocalDate dOB = (LocalDate) field.get(p);
+                    ret += "( " + dOB.getYear() + "-"
+                            + ((dOB.getMonthValue() < 10) ? "0" + dOB.getMonthValue() : dOB.getMonthValue()) + "-"
+                            + ((dOB.getDayOfMonth() < 10) ? "0" + dOB.getDayOfMonth() : dOB.getDayOfMonth()) + " )";
+                } else {
+                    ret += field.get(p) + "   ";
+                }
+            }
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+        return ret;
+    }
+
+    static <T> T[] append2Array(T[] elements, T element) {
+        T[] newArray = Arrays.copyOf(elements, elements.length + 1);
+        newArray[elements.length] = element;
+
+        return newArray;
+    }
+    //
+
+    // #=========================================================================#
+    // # - - - - - - - - - - - - - - [ R E A D E R ] - - - - - - - - - - - - - - #
+    // #=========================================================================#
+
+    //
+
+    // Dinamic Setter using STRING var name
+    static Personagens setDinamic(String varName, Object value, Personagens clazz) {
+        try {
+            // System.out.println(value);
+
+            String temp = varName;
+            varName = "set";
+            varName += (char) (temp.charAt(0) - 32);
+
+            for (int i = 1; i < temp.length(); i++) {
+                varName += temp.charAt(i);
+            }
+
+            Class<?>[] parameterType = new Class[1];
+            parameterType[0] = value.getClass();
+
+            clazz.getClass().getDeclaredMethod(varName, parameterType).invoke(clazz, value);
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return clazz;
+    }
+
+    static int why = 3;
+
+    // First Step on Reading CSV
+    static private String[] readFirstCSV(String text) {
+        String[] out = {};
+        String temp = "";
+
+        for (int i = why; i < text.length(); i++) {
+            char C = text.charAt(i);
+            if (C == ';') {
+                out = append2Array(out, temp);
+                temp = "";
+            } else {
+                temp += C;
+            }
+        }
+
+        if (temp.length() > 0)
+            out = append2Array(out, temp);
+
+        return out;
+    }
+
+    // YE
+
+    // Convert TEXT to ARRAY
+    static String[] textToArray(String text) {
+        String[] out = {};
+        String temp = "";
+
+        for (int i = 0; i < text.length(); i++) {
+            char C = text.charAt(i);
+            if (C == '\'' || C == '\"')
+                ;
+            else if (C == ';') {
+                out = append2Array(out, temp);
+                temp = "";
+            } else {
+                temp += C;
+            }
+        }
+
+        if (temp.length() > 0) {
+            out = append2Array(out, temp);
+        }
+
+        return out;
+    }
+
+    // Main Line reader
+    static Personagens readCSVLine(String text, String[] order, Personagens clazz) {
+        String temp = "";
+        int mod = 0; // 0 = normal, 1 = list
+        int j = 0;
+
+        // Handles the text analisis
+        for (int i = 0; i < text.length(); i++) {
+            char C = text.charAt(i);
+
+            // Nothing when in mode LIST, Execute Dinamic Seter in mode NORMAL
+            if (C == ';' && (mod == 0 || mod == 2)) {
+                if (mod == 2) {
+                    clazz = setDinamic(order[j], textToArray(temp), clazz);
+                    j++;
+                    temp = "";
+                    mod = 0;
+                } else {
+                    clazz = setDinamic(order[j], temp, clazz);
+                    j++;
+                    temp = "";
+                }
+            } else if (C == '\"' || C == '\'')
+                ; // Ignore " " and ' '
+            else if (C == '[') // Change mode when it finds "["
+                mod = 1;
+            else if (C == ']') {
+                // end of mode LIST, transform text to array os String and execute Dinamic Seter
+                mod = 2;
+            } else {
+                temp += C;
+            }
+        }
+
+        if (temp.length() > 0) {
+            if (mod == 0) {
+                clazz = setDinamic(order[j], temp, clazz);
+            } else {
+                clazz = setDinamic(order[j], textToArray(temp), clazz);
+            }
+        }
+
+        return clazz;
+    }
+
+    // Read CSV Function
+    static Personagens[] readCSV(String filename) {
+        Personagens[] out = new Personagens[0];
+
+        try {
+            BufferedReader fileR = new BufferedReader(new FileReader(filename));
+
+            String[] order = readFirstCSV(fileR.readLine());
+
+            String temp = "";
+
+            while ((temp = fileR.readLine()) != null) {
+                out = append2Array(out, readCSVLine(temp, order, new Personagens()));
+            }
+
+            fileR.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return out;
+    }
+    //
+
+    // #=======================================================================#
+    // # - - - - - - - - - - - - - - - [ A B B ] - - - - - - - - - - - - - - - #
+    // #=======================================================================#
+
+    //
+
+    public interface Node<T> {
+    }
+
+    static public class ABNode<E extends Comparable<E>> implements Node<E> {
+        ABNode<E> right, left;
+        E value;
+        boolean col;
+
+        ABNode(E val) {
+            this.value = val;
+            this.right = null;
+            this.left = null;
+        }
+    }
+
+    static public class RBt<T extends Comparable<T>> implements Comparable<RBt<T>> {
+        ABNode<T> start;
+
+        ABNode<T> insert(T val) {
+            if (start == null) {
+                start = new ABNode<T>(val);
+                start.col = true;
+                return start;
+            }
+            start = insert(new ABNode<>(val), start);
+            if (start.col == false)
+                start.col = true;
+            return start;
+        }
+
+        ABNode<T> insert(ABNode<T> in) {
+            if (start == null) {
+                start = in;
+                start.col = true;
+                return start;
+            }
+            start = insert(in, start);
+            if (start.col == false)
+                start.col = true;
+            return start;
+        }
+
+        /*
+         * find
+         * if left > nd.left = rec(left)
+         * if right > nd.right = rec(left)
+         * else > ret new node
+         * 
+         * balance
+         * if left
+         * * if right col true // black
+         * col switch
+         * * else
+         * left left - balance
+         * left right - balance
+         * else
+         * * if left col true // black
+         * col switch
+         * * else
+         * right left - balance
+         * right right - balance
+         * 
+         */
+        ABNode<T> balanceRight(ABNode<T> nd) {
+            if (nd.right.right != null && nd.right.right.col == false) {
+                // Recolor
+                if (nd.left != null && nd.left.col == false) {
+                    recolor(nd);
+                    return nd;
+                }
+
+                // Right-Right > Rotate Left
+                return rotateLeft(nd);
+            } else if (nd.right.left != null && nd.right.left.col == false) {
+                // Recolor
+                if (nd.left != null && nd.left.col == false) {
+                    recolor(nd);
+                    return nd;
+                }
+
+                // Right-Left > Rotate Right > Rotate left
+                nd.right = rotateRight(nd.right);
+                return rotateLeft(nd);
+            }
+            return nd;
+        }
+
+        ABNode<T> balanceLeft(ABNode<T> nd) {
+            if (nd.left.left != null && nd.left.left.col == false) {
+                // Recolor
+                if (nd.right != null && nd.right.col == false) {
+                    recolor(nd);
+                    return nd;
+                }
+
+                // Left-Left > Rotate Right
+                return rotateRight(nd);
+            } else if (nd.left.right != null && nd.left.right.col == false) {
+                // Recolor
+                if (nd.right != null && nd.right.col == false) {
+                    recolor(nd);
+                    return nd;
+                }
+
+                // Left-Right > Rotate Left > Rotate Right
+                nd.left = rotateLeft(nd.left);
+                return rotateRight(nd);
+            }
+            return nd;
+        }
+
+        protected ABNode<T> insert(ABNode<T> in, ABNode<T> nd) {
+            if (in == null) {
+                return nd;
+            }
+            if (nd == null) {
+                return in;
+            }
+            // find
+            if (in.value.compareTo(nd.value) > 0) {
+                nd.right = insert(in, nd.right);
+
+                // Balance Right
+                if (nd.right != null && nd.right.col == false) {
+                    return balanceRight(nd);
+                }
+            } else if (in.value.compareTo(nd.value) < 0) {
+                nd.left = insert(in, nd.left);
+
+                // Balance Left
+                if (nd.left != null && nd.left.col == false) {
+                    return balanceLeft(nd);
+                }
+
+            }
+            return nd;
+        }
+
+        int size() {
+            if (start == null) {
+                return 0;
+            }
+            return 1 + size(start);
+        }
+
+        int size(ABNode<T> nd) {
+            if (nd == null) {
+                return 0;
+            }
+            return 1 + size(nd.right) + size(nd.left);
+        }
+
+        public int compareTo(RBt<T> av2) {
+            int ret = this.size() - av2.size();
+
+            if (ret == 0) {
+                return compare(this.start, av2.start);
+            }
+
+            return ret;
+        }
+
+        public int compareFirst(RBt<T> av2) {
+            int ret = this.start.value.compareTo(av2.start.value);
+            return ret;
+        }
+
+        int compare(ABNode<T> nd1, ABNode<T> nd2) {
+            int ret = nd1.value.compareTo(nd2.value);
+            if (ret == 0) {
+                return compare(nd1.right, nd2.left);
+            }
+
+            return ret;
+        }
+
+        ABNode<T> getNd(T val) {
+            return getNd(val, start);
+        }
+
+        protected ABNode<T> getNd(T val, ABNode<T> nd) {
+            if (nd == null) {
+                return nd;
+            }
+            int comp = val.compareTo(nd.value);
+            if (comp > 0) {
+                out.print("dir ");
+                return getNd(val, nd.right);
+            }
+            if (comp < 0) {
+                out.print("esq ");
+                return getNd(val, nd.left);
+            }
+            return nd;
+        }
+
+        Node<T> getBiggest() {
+            return getBiggest(start);
+        }
+
+        protected Node<T> getBiggest(ABNode<T> nd) {
+            if (nd == null) {
+                return null;
+            }
+            while (nd.right != null) {
+                nd = nd.right;
+            }
+            return nd;
+
+        }
+
+        Node<T> getSmallest() {
+            return getSmallest(start);
+        }
+
+        protected Node<T> getSmallest(ABNode<T> nd) {
+            if (nd == null) {
+                return null;
+            }
+            while (nd.left != null) {
+                nd = nd.left;
+            }
+            return nd;
+
+        }
+
+        Node<T> delete(T val) {
+            ABNode<T> nd = start;
+            ABNode<T> ndParent = null;
+            int comp = val.compareTo(nd.value);
+            int lc = 0;
+            while (comp != 0 && nd != null) {
+                ndParent = nd;
+                lc = comp;
+                if (comp > 0) {
+                    nd = nd.right;
+                }
+                if (comp < 0) {
+                    nd = nd.left;
+                }
+                comp = val.compareTo(nd.value);
+            }
+            ABNode<T> prox = null;
+            ABNode<T> other = null;
+            if (nd.right != null) {
+                prox = nd.right;
+                other = nd.left;
+            } else if (nd.left != null) {
+                prox = nd.left;
+            }
+            if (ndParent != null) {
+                if (lc < 0) {
+                    ndParent.left = prox;
+                    insert(other);
+                } else {
+                    ndParent.right = prox;
+                    insert(other);
+                }
+                rebalance(ndParent);
+            } else {
+                start = prox;
+                insert(other);
+                rebalance(start);
+            }
+            return nd;
+        }
+
+        // rotations
+
+        ABNode<T> rotateLeft(ABNode<T> nd) {
+            ABNode<T> x = nd.right;
+            boolean n = nd.col;
+            ABNode<T> y = x.left;
+
+            x.left = nd;
+            nd.col = x.col;
+            x.col = n;
+            nd.right = y;
+            return x;
+        }
+
+        ABNode<T> rotateRight(ABNode<T> nd) {
+            ABNode<T> x = nd.left;
+            boolean n = nd.col;
+            ABNode<T> y = x.right;
+
+            x.right = nd;
+            nd.col = x.col;
+            x.col = n;
+            nd.left = y;
+            return x;
+        }
+
+        void recolor(ABNode<T> nd) {
+            nd.col = false;
+            nd.left.col = true;
+            nd.right.col = true;
+        }
+
+        int rebalance(ABNode<T> nd) {
+            return 0;
+        }
+
+        RBt() {
+            this.start = null;
+        }
+
+    }
+
+    static public class Hash<T extends Comparable<T>> {
+        T[] hash;
+        T[] hash2;
+
+        int sizeH;
+        int sizeH2;
+        int h2;
+    }
+
+    //
+
+    // #=========================================================================#
+    // # - - - - - - - - - - - - - - - [ M A I N ] - - - - - - - - - - - - - - - #
+    // #=========================================================================#
+
+    //
+
+    static int CalcHash(String name, int tam) {
+        int result = 0;
+        for (int i = 0; i < name.length(); i++) {
+            result += name.charAt(i);
+        }
+
+        return result % tam;
+    }
+
+    static Personagens find(String ID, Personagens[] characters) {
+        for (Personagens p : characters) {
+            if (p.id.equals(ID)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        String OS = System.getProperty("os.name").toLowerCase();
+
+        if (OS.contains("nix") || OS.contains("nux") || OS.contains("aix")) {
+            why = 1;
+        }
+
+        Personagens[] hPCharacters = readCSV("/tmp/characters.csv");
+
+        try {
+
+            // used for sorting
+            String[] att = { "name" };
+
+            setCompItens(att);
+
+            String buff = in.readLine();
+
+            // Read and add to List
+            Hash<Personagens> CharList = new Hash<>();
+            CharList.sizeH = 21;
+            CharList.sizeH2 = 9;
+            CharList.hash = new Personagens[21];
+            CharList.hash2 = new Personagens[9];
+
+            while (!buff.equals("FIM")) {
+                Personagens p = find(buff, hPCharacters);
+                if (p != null) {
+                    int h = CalcHash(p.name, CharList.sizeH);
+                    if (CharList.hash[h] == null) {
+                        CharList.hash[h] = p;
+                    } else if (CharList.h2 < CharList.sizeH2) {
+                        CharList.hash2[CharList.h2] = p;
+                        CharList.h2++;
+                    }
+                } else {
+                    for (int i = 0; i < buff.length(); i++) {
+                        System.err.print("[" + (int) buff.charAt(i) + "]");
+                    }
+                    System.err.println("ID <" + buff + "> not Found Test :" + hPCharacters[0].id);
+                }
+                buff = in.readLine();
+            }
+
+            String[] att2 = { "name" };
+
+            setCompItens(att2);
+            buff = in.readLine();
+            while (!buff.equals("FIM")) {
+                out.print(buff);
+                int h = CalcHash(buff, CharList.sizeH);
+                if (CharList.hash[h] != null && CharList.hash[h].name.equals(buff)) {
+                    out.print(" (Posicao: " + h + ") SIM\n");
+                } else {
+                    boolean ret = false;
+                    for (int i = 0; i < CharList.h2; i++) {
+                        if (CharList.hash2[i].name.equals(buff)) {
+                            out.print(" (Posicao: " + (CharList.sizeH + i) + ") SIM\n");
+                            ret = true;
+                        }
+                    }
+                    if (!ret) {
+                        out.print(" NAO\n");
+                    }
+                }
+                buff = in.readLine();
+            }
+
+            /*
+             * BufferedWriter f = new BufferedWriter(new
+             * FileWriter("matricula_mergesort.txt"));
+             * f.write("820939\t" + comp + "\t" + mov);
+             * // arrChar = selectionSort(arrChar, "name");
+             * f.close();
+             */
+
+        } catch (
+
+        Exception e) {
+            out.println(e);
+        }
+    }
+}
